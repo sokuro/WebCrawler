@@ -15,3 +15,4 @@ class CrawlerItem(Item):
     # name = scrapy.Field()
     title = Field()
     link = Field()
+    image = Field()
