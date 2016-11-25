@@ -8,7 +8,7 @@ class elementsWindow(wx.Frame):
         self.InitUI()
 
         # set size of the panel
-        self.SetSize((600, 600))
+        self.SetSize((700, 700))
 
         # center and show the window
         self.Center()
@@ -22,6 +22,7 @@ class elementsWindow(wx.Frame):
         fitem = fileMenu.Append(wx.ID_EXIT, 'Quit', 'Quit Application')
         menubar.Append(fileMenu, '&File')
         self.SetMenuBar(menubar)
+        # bind the method to the event
         self.Bind(wx.EVT_MENU, self.OnQuit, fitem)
 
         # 1st: build a panel
@@ -33,12 +34,12 @@ class elementsWindow(wx.Frame):
         # 3rd: build a horizontal box inside the vertical one
         hbox1 = wx.BoxSizer(wx.HORIZONTAL)
         # set a label
-        label1 = wx.StaticText(panel, label='Set Domain')
+        labelDomain = wx.StaticText(panel, label='Set Domain')
         # label1.SetFont(font)
         # set a scanner right to the static label. Flag and border defines the distance among widgets.
-        hbox1.Add(label1, flag=wx.RIGHT, border=10)
-        scanner1 = wx.TextCtrl(panel)
-        hbox1.Add(scanner1, proportion=5)
+        hbox1.Add(labelDomain, flag=wx.RIGHT, border=10)
+        scannerDomain = wx.TextCtrl(panel)
+        hbox1.Add(scannerDomain, proportion=5)
         vbox.Add(hbox1, flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP, border=10)
 
         # set the position in the vbox
@@ -46,48 +47,63 @@ class elementsWindow(wx.Frame):
 
         # 4th: add new scanner horizontal box
         hbox2 = wx.BoxSizer(wx.HORIZONTAL)
-        label2 = wx.StaticText(panel, label='Set Url')
-        hbox2.Add(label2, flag=wx.RIGHT, border=36)
-        scanner2 = wx.TextCtrl(panel)
-        hbox2.Add(scanner2, proportion=5)
+        labelUrl = wx.StaticText(panel, label='Set Url')
+        hbox2.Add(labelUrl, flag=wx.RIGHT, border=36)
+        scannerUrl = wx.TextCtrl(panel)
+        hbox2.Add(scannerUrl, proportion=5)
         vbox.Add(hbox2, flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP, border=10)
 
         # 5th: build another horizontal box inside the vertical one
         hbox3 = wx.BoxSizer(wx.HORIZONTAL)
-        label3 = wx.StaticText(panel, label='Result')
-        hbox3.Add(label3)
+        labelResult = wx.StaticText(panel, label='Result')
+        hbox3.Add(labelResult)
         vbox.Add(hbox3, flag=wx.LEFT | wx.TOP, border=10)
 
         vbox.Add((-1, 10))
 
         # 6th: add multiple lines
         hbox4 = wx.BoxSizer(wx.HORIZONTAL)
-        scanner3 = wx.TextCtrl(panel, style=wx.TE_MULTILINE)
-        hbox4.Add(scanner3, proportion=5, flag=wx.EXPAND)
+        scannerMultiline = wx.TextCtrl(panel, style=wx.TE_MULTILINE)
+        hbox4.Add(scannerMultiline, proportion=5, flag=wx.EXPAND)
         vbox.Add(hbox4, proportion=5, flag=wx.LEFT | wx.RIGHT | wx.EXPAND, border=10)
 
         vbox.Add((-1, 10))
 
         # 7th: generate the output file
+        hbox5 = wx.BoxSizer(wx.HORIZONTAL)
+        labelOutput = wx.StaticText(panel, label='Output File')
+        hbox5.Add(labelOutput, flag=wx.RIGHT, border=20)
+        scannerOutput = wx.TextCtrl(panel)
+        hbox5.Add(scannerOutput, proportion=5)
+        vbox.Add(hbox5, flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP | wx.BOTTOM, border=10)
 
+        vbox.Add((-1, 10))
 
         # 8th: add some buttons
         hbox6 = wx.BoxSizer(wx.HORIZONTAL)
-        button1 = wx.Button(panel, label='START', size=(70, 30))
-        hbox6.Add(button1)
-        button2 = wx.Button(panel, label='SAVE', size=(70, 30))
-        hbox6.Add(button2, flag=wx.LEFT | wx.BOTTOM, border=5)
-        button3 = wx.Button(panel, label='EXIT', size=(70, 30))
-        button3.Bind(wx.EVT_BUTTON, self.OnQuit, button3)
-        hbox6.Add(button3, flag=wx.LEFT | wx.BOTTOM, border=5)
+        buttonStart = wx.Button(panel, label='START', size=(70, 30))
+        hbox6.Add(buttonStart)
+        buttonSave = wx.Button(panel, label='SAVE', size=(70, 30))
+        hbox6.Add(buttonSave, flag=wx.LEFT | wx.BOTTOM, border=5)
+        buttonExit = wx.Button(panel, label='EXIT', size=(70, 30))
+        buttonExit.Bind(wx.EVT_BUTTON, self.OnQuit, buttonExit)
+        hbox6.Add(buttonExit, flag=wx.LEFT | wx.BOTTOM, border=5)
         vbox.Add(hbox6, flag=wx.ALIGN_RIGHT | wx.RIGHT, border=10)
 
         # set the size of the panel according to the vbox
         panel.SetSizer(vbox)
 
+    # event handling
+    def OnStart(self, e):
+        pass
+
+    def OnSave(self, e):
+        pass
+
     def OnQuit(self, e):
         self.Close()
 
+# main method
 def main():
     app = wx.App()
     elementsWindow(None, title='Demica WebArchiver')
