@@ -1,6 +1,12 @@
 import wx
+from crawler.crawler.spiders import spider
 
 class elementsWindow(wx.Frame):
+
+    # build an object of the Spider class
+    spider = spider.SiteSpider()
+    domain = ''
+    url = ''
 
     def __init__(self, *args, **kwargs):
         super(elementsWindow, self).__init__(*args, **kwargs)
@@ -39,6 +45,7 @@ class elementsWindow(wx.Frame):
         # set a scanner right to the static label. Flag and border defines the distance among widgets.
         hbox1.Add(labelDomain, flag=wx.RIGHT, border=10)
         scannerDomain = wx.TextCtrl(panel)
+        self.Bind(wx.EVT_TEXT, self.OnTypeDomain, id=scannerDomain.GetId())
         hbox1.Add(scannerDomain, proportion=5)
         vbox.Add(hbox1, flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP, border=10)
 
@@ -50,6 +57,7 @@ class elementsWindow(wx.Frame):
         labelUrl = wx.StaticText(panel, label='Set Url')
         hbox2.Add(labelUrl, flag=wx.RIGHT, border=36)
         scannerUrl = wx.TextCtrl(panel)
+        self.Bind(wx.EVT_TEXT, self.OnTypeUrl, id=scannerUrl.GetId())
         hbox2.Add(scannerUrl, proportion=5)
         vbox.Add(hbox2, flag=wx.EXPAND | wx.LEFT | wx.RIGHT | wx.TOP, border=10)
 
@@ -82,6 +90,7 @@ class elementsWindow(wx.Frame):
         # 8th: add some buttons
         hbox6 = wx.BoxSizer(wx.HORIZONTAL)
         buttonStart = wx.Button(panel, label='START', size=(70, 30))
+        self.Bind(wx.EVT_BUTTON, self.OnStart, id=buttonStart.GetId())
         hbox6.Add(buttonStart)
         buttonSave = wx.Button(panel, label='SAVE', size=(70, 30))
         hbox6.Add(buttonSave, flag=wx.LEFT | wx.BOTTOM, border=5)
@@ -94,8 +103,16 @@ class elementsWindow(wx.Frame):
         panel.SetSizer(vbox)
 
     # event handling
+    def OnTypeDomain(self, e):
+        self.domain = e.EventObject.Value
+
+    def OnTypeUrl(self, e):
+        self.url = e.EventObject.Value
+
     def OnStart(self, e):
-        pass
+        self.SetTitle(self.url)
+        self.process.crawl(self.spider, start_urls=self.url)
+        self.process.start()
 
     def OnSave(self, e):
         pass
