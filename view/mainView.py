@@ -3,6 +3,15 @@ import sys
 from crawler.crawler.spiders import spider
 from scrapy.crawler import CrawlerProcess
 
+# help class for Redirection
+class RedirectText(object):
+    def __init__(self, aWxTextCtrl):
+        self.out=aWxTextCtrl
+
+    def write(self, string):
+        self.out.WriteText(string)
+
+
 class elementsWindow(wx.Frame):
 
     # build an object of the Spider class
@@ -109,7 +118,9 @@ class elementsWindow(wx.Frame):
         vbox.Add(hbox6, flag=wx.ALIGN_RIGHT | wx.RIGHT, border=10)
 
         # redirection
-        sys.stdout = logMultiline
+        redir = RedirectText(logMultiline)
+        # sys.stdout = logMultiline
+        sys.stdout = redir
 
         # set the size of the panel according to the vbox
         panel.SetSizer(vbox)
