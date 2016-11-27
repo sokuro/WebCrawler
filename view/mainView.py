@@ -1,10 +1,15 @@
 import wx
+import sys
 from crawler.crawler.spiders import spider
+from scrapy.crawler import CrawlerProcess
 
 class elementsWindow(wx.Frame):
 
     # build an object of the Spider class
     spider = spider.SiteSpider()
+    process = CrawlerProcess({
+        'USER_AGENT': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)'
+    })
     domain = ''
     url = ''
 
@@ -32,7 +37,8 @@ class elementsWindow(wx.Frame):
         self.Bind(wx.EVT_MENU, self.OnQuit, fitem)
 
         # 1st: build a panel
-        panel = wx.Panel(self)
+        # define so it looks the correct on all platforms
+        panel = wx.Panel(self, wx.ID_ANY)
 
         # 2nd: build a vertical box
         vbox = wx.BoxSizer(wx.VERTICAL)
@@ -63,16 +69,19 @@ class elementsWindow(wx.Frame):
 
         # 5th: build another horizontal box inside the vertical one
         hbox3 = wx.BoxSizer(wx.HORIZONTAL)
-        labelResult = wx.StaticText(panel, label='Result')
-        hbox3.Add(labelResult)
+        log = wx.StaticText(panel, label='Log')
+        hbox3.Add(log)
         vbox.Add(hbox3, flag=wx.LEFT | wx.TOP, border=10)
 
         vbox.Add((-1, 10))
 
         # 6th: add multiple lines
         hbox4 = wx.BoxSizer(wx.HORIZONTAL)
-        scannerMultiline = wx.TextCtrl(panel, style=wx.TE_MULTILINE)
-        hbox4.Add(scannerMultiline, proportion=5, flag=wx.EXPAND)
+        logMultiline = wx.TextCtrl(panel, wx.ID_ANY, style=wx.TE_MULTILINE | wx.TE_READONLY | wx.HSCROLL)
+
+
+
+        hbox4.Add(logMultiline, proportion=5, flag=wx.EXPAND)
         vbox.Add(hbox4, proportion=5, flag=wx.LEFT | wx.RIGHT | wx.EXPAND, border=10)
 
         vbox.Add((-1, 10))
@@ -99,6 +108,9 @@ class elementsWindow(wx.Frame):
         hbox6.Add(buttonExit, flag=wx.LEFT | wx.BOTTOM, border=5)
         vbox.Add(hbox6, flag=wx.ALIGN_RIGHT | wx.RIGHT, border=10)
 
+        # redirection
+        sys.stdout = logMultiline
+
         # set the size of the panel according to the vbox
         panel.SetSizer(vbox)
 
@@ -122,8 +134,8 @@ class elementsWindow(wx.Frame):
 
 # main method
 def main():
-    app = wx.App()
-    elementsWindow(None, title='Demica WebArchiver')
+    app = wx.App(redirect=False)
+    elementsWindow(None, title='Demica WebArchiver').Show()
     app.MainLoop()
 
 
